@@ -1,0 +1,79 @@
+CREATE DATABASE ATIVIDADEBD;
+USE ATIVIDADEBD;
+create table alunos (id integer primary key, matricula int, nome text (200), curso text (150));
+insert into alunos values(001, 20201, "Marcelo", "CCOMP");
+insert into alunos values(002, 20202, "João", "CCOMP");
+
+create table funcionarios(id_funcionarios integer primary key, codigo int, nome text(200), salario double, data_de_nascimento date);
+
+create table aluno (id_aluno integer primary key, nome text(200), email char(200), dtcadastro date);
+insert into aluno values(01, "Douglas", "douglas@targettrust.com.br", null);
+insert into aluno values(02, "José Carlos", "josecarlos@targettrust.com.br", "2013-01-21");
+insert into aluno values(03, "Douglas", "dg@targettrust.com.br", "2013-01-21");
+insert into aluno values(04, "Marta", "marta@targettrust.com.br", "2013-01-21");
+insert into aluno values(05, "Simone", "simone@targettrust.com.br", "2013-01-21");
+insert into aluno values(06, "Rafael", "rafael@targettrust.com.br", "2013-01-21");
+insert into aluno values(07, "ROCK", "rock@targettrust.com.br", "2013-01-21");
+select id_aluno, nome from aluno;
+
+create table marcas(codMarca integer primary key, marca text(200), origem text(100));
+insert into marcas values(1,"Fiat","Italiana");
+insert into marcas values(2,"Ford","Americana");
+insert into marcas values(3,"GM","Americana");
+insert into marcas values(4,"Volkswagem","Alemã");
+insert into marcas values(5,"Toyota","Japonesa");
+insert into marcas values(6,"Ferrari","Italiana");
+insert into marcas values(7,"Renault","Francesa");
+create table carros(modelo text(100), cor text(100), ano char, valor int,codMarca int);
+insert into carros values("Uno","azul","1997",14000,1);
+insert into carros values("Palio","preto","1999",16000,1);
+insert into carros values("Palio","azul","2008",32000,1);
+insert into carros values("Palio","branco","2002",22000,1);
+insert into carros values("Fiesta","branco","2000",18000,2);
+insert into carros values("Ka","azul","2005",22500,2);
+insert into carros values("Fiesta","azul","2007",28000,2);
+insert into carros values("Monza","preto","1995",15000,3);
+insert into carros values("Vectra","prata","2006",35000,3);
+insert into carros values("Vectra","azul","1999",29000,3);
+insert into carros values("Monza","prata","1997",12000,3);
+insert into carros values("Gol","prata","1997",16000,4);
+insert into carros values("Fox","preto","2002",31000,4);
+insert into carros values("Gol","azul","1999",25000,4);
+insert into carros values("Fox","prata","2008",39000,4);
+insert into carros values("Gol","vermelho","2005",16000,4);
+insert into carros values("Corola","prata","2004",60000,5);
+insert into carros values("Renault 206","vermelho","2003",25000,7);
+SELECT m.marca, c.modelo, c.cor, c.valor FROM marcas as m, carros as
+c WHERE m.codMarca = c.codMarca AND c.valor between 20000 and
+30000;
+
+create table mecanicos(id_mecanico int,mec_nome varchar(200),mec_especialidade varchar(200));
+insert into mecanicos values(1,"Marcelo","Geral");
+insert into mecanicos values(2,"Chrystian","Eletrica");
+insert into mecanicos values(3,"Batista","Motores");
+create table clientes(id_cliente int,cli_nome varchar(200),cli_cpf varchar(50),cli_veiculo varchar(50),mecanico_id int);
+insert into clientes values(01,"Joao","000111","Celta",1);
+insert into clientes values(02,"Maria","000222","Gol",3);
+insert into clientes values(03,"Nonato","000333","Corola",2);
+insert into clientes values(04,"Elma","000444","BMW",2);
+select id_cliente,cli_nome,cli_cpf,cli_veiculo,mecanico_id,mec_nome from clientes left join mecanicos on (mecanico_id=id_mecanico);
+select cli_cpf,cli_nome,mec_nome from clientes left join mecanicos on (mecanico_id=id_mecanico);
+
+create table clientes2(id_cliente int,cli_nome varchar(100),cli_cpf varchar(100),cli_veiculo varchar(100));
+insert into clientes2 values(101,"Marcelo","111000","Gol");
+insert into clientes2 values(102,"Chrystian","222000","Corola");
+insert into clientes2 values(103,"Bezerra","333000","hb20");
+insert into clientes2 values(104,"Batista","444000","Celta");
+create table vendas(id_venda int, cliente_id int, produto_id int, ven_data date);
+insert into vendas values(21,101,901,"2020-08-24");
+insert into vendas values(22,102,902,"2020-08-25");
+insert into vendas values(23,103,903,"2020-08-26");
+create table produtos(id_produto int,prod_nome varchar(100));
+insert into produtos values(901,"melancia");
+insert into produtos values(902,"melao");
+insert into produtos values(903,"uva");
+insert into produtos values(904,"manga");
+insert into produtos values(905,"abacaxi");
+select clientes2.* from clientes2 join vendas on vendas.cliente_id=clientes2.id_cliente group by clientes2.id_cliente;
+select cliente_id, count(*) from vendas group by cliente_id;
+select * from produtos where not exists (select * from vendas where vendas.produto_id=produtos.id_produto);
